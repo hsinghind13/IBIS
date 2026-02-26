@@ -29,22 +29,22 @@ DPA(depth)  = scale_phi × (Vac_Ions + Vac_Recoils) × 1e8 / n_atoms
 at%(depth)  = C / (n + C) × 100   where C = scale_phi × B(depth)
 ```
 
-### Presets System
-**Context**: Common experimental setups that should pre-fill SRIM params + beam params.
-
-**Candidates**:
-- 200 keV He → SiC (implanter): n=9.611e22, DPI=0.04068, B=6.570e4, q=1, slit=3mm
-- 3 MeV Si → SiC (tandem): n=9.611e22, DPI=0.5451, B=4.350e4, q=2, slit=3mm
-- More to be added from user's notebook examples
-
-**Implementation**: Simple dropdown in header or SRIM panel. Selecting a preset calls `setSrim()` + `setBeam()` with hardcoded values.
-
 ### Dark Mode
 - Toggle in header, state via `useState`
 - Add `dark` class to root `<div>`, use Tailwind's `dark:` variants
 - No localStorage persistence needed (per user request)
 
 ---
+
+### File Structure
+**Decision**: Split into modules from the start.
+- `src/lib/physics.js` — PHY object (fluence, atPercent, effectiveFlux, beamPower, formatters)
+- `src/lib/parsers.js` — SRIM file parsers (peak-only + full-profile for charts)
+- `src/components/` — React components split by panel/tab
+- Main `App.jsx` stays as the orchestrator with state and layout
+
+### Presets
+**Decision**: No presets dropdown — removed from scope.
 
 ## Open Questions
 - Should depth profile parsing happen in a Web Worker to avoid blocking UI on large files?

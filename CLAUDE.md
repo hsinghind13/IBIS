@@ -23,6 +23,20 @@ Single-page React web app for planning ion irradiation experiments. Computes flu
 - `SRIMCompute.ipynb` — Python reference notebook for MeV tandem calculations + depth profile plots
 - `Dose Calculator (3).xlsx` — Original Excel spreadsheet (historical reference)
 
+## Project Documentation
+- `CLAUDE.md` — This file. Project instructions for Claude Code sessions.
+- `ARCHITECTURE.md` — System design, component hierarchy, data flow, API tables
+- `DECISIONS.md` — Chronological log of design decisions with context and rationale
+- `SCRATCHPAD.md` — Living working notes, current status, open questions
+- `LESSONS.md` — Patterns, gotchas, debugging insights
+- `TODO.md` — Phased feature roadmap with checkboxes
+- `CHANGELOG.md` — Change history
+
+## Workflow Commands
+- `/checkpoint` — After finishing a work chunk: update TODO, CHANGELOG, DECISIONS, SCRATCHPAD, ARCHITECTURE, LESSONS to reflect current state
+- `/debrief` — End-of-session: full doc sweep + handoff summary for the next session
+- `/arch-sync` — Re-read source code and update ARCHITECTURE.md to match reality after refactors
+
 ## Physics Domain Quick Reference
 - **DPA** = displacements per atom (radiation damage metric)
 - **DPI** = peak total vacancies [vac/(Å·ion)] from VACANCY.txt

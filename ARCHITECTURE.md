@@ -126,6 +126,5 @@ Both notebooks contain `plot_depth_profiles()` which produces twin-y DPA + at% v
 - Input validation with inline errors
 - Live flux readout in beam panel
 - Sortable results tables
-- Preset configurations dropdown
-- Dark mode toggle
+- Dark mode toggle (sun/moon icon button in header)
 - Mobile responsiveness

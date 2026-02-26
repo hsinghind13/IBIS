@@ -22,7 +22,6 @@ Ordered by implementation priority. Check items off as completed.
 - [ ] Input validation with inline error messages on Compute buttons
 - [ ] Live flux readout in BeamPanel (updates as user types)
 - [ ] Sortable results tables (click column header to sort asc/desc)
-- [ ] Presets dropdown (200 keV He→SiC, 3 MeV Si→SiC, user-configurable)
 
 ## Phase 4: Responsiveness & Theming
 - [ ] Mobile-responsive layouts (grid stacking on small screens)
