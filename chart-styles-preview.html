@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IBIS — Journal Chart Styles Comparison</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f0f0; padding: 24px; }
+  h1 { text-align: center; font-size: 20px; margin-bottom: 4px; color: #111; }
+  .sub { text-align: center; font-size: 12px; color: #777; margin-bottom: 24px; line-height: 1.5; max-width: 800px; margin-left: auto; margin-right: auto; }
+  .section { max-width: 1500px; margin: 0 auto 40px; }
+  .section-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 16px; border-bottom: 2px solid #ccc; padding-bottom: 6px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+  .card-head { padding: 12px 16px 8px; border-bottom: 1px solid #eee; }
+  .card-head h3 { font-size: 13px; font-weight: 700; color: #222; margin-bottom: 2px; }
+  .card-head .journal { font-size: 10px; font-weight: 600; color: #fff; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-right: 4px; }
+  .card-head .specs { font-size: 10px; color: #999; line-height: 1.5; margin-top: 4px; }
+  .card-head .specs b { color: #666; }
+  .card-body { padding: 16px; }
+  .card canvas { width: 100% !important; height: 280px !important; }
+  .j-aps { background: #1d4ed8; }
+  .j-nat { background: #dc2626; }
+  .j-els { background: #059669; }
+  .j-ieee { background: #7c3aed; }
+  .j-rsc { background: #d97706; }
+  .j-acs { background: #0891b2; }
+  .badge { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
+  .badge-rec { background: #dbeafe; color: #1d4ed8; }
+  .badge-cb { background: #fef3c7; color: #92400e; }
+  .dark-card .card-body { background: #1a1a2e; }
+  .note { font-size: 11px; color: #888; text-align: center; margin-top: 24px; line-height: 1.6; }
+  .note a { color: #2563eb; }
+</style>
+</head>
+<body>
+
+<h1>Journal-Quality Chart Styles</h1>
+<p class="sub">
+  Each style replicates the actual figure requirements of its target journal family.<br>
+  Specs are sourced from official author guidelines. All palettes are colorblind-safe (Okabe-Ito or journal-approved).
+</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 1: VACANCY PROFILES (3-line)           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Vacancy Profile (3 curves: Total, Ions, Recoils)</div>
+  <div class="grid3">
+
+    <!-- 1. APS / Physical Review -->
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-aps">APS</span> Physical Review<span class="badge badge-rec">Recommended</span></h3>
+        <div class="specs">
+          <b>Font:</b> Helvetica Neue Condensed (we use Helvetica/Arial)<br>
+          <b>Labels:</b> 10pt axis labels, 9pt tick numbers<br>
+          <b>Axes:</b> 0.5pt lines, ticks inward, minor ticks visible<br>
+          <b>Grid:</b> None &nbsp;|&nbsp; <b>Lines:</b> 1.0pt data lines<br>
+          <b>Units:</b> Parentheses — "Depth (µm)" not "[µm]"
+        </div>
+      </div>
+      <div class="card-body"><canvas id="vac-aps"></canvas></div>
+    </div>
+
+    <!-- 2. Nature -->
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-nat">Nature</span> Nature / Nature Materials</h3>
+        <div class="specs">
+          <b>Font:</b> Helvetica or Arial, 5–7pt at print size<br>
+          <b>Axes:</b> 0.25–1pt range, thin clean lines<br>
+          <b>Grid:</b> None &nbsp;|&nbsp; <b>Lines:</b> 0.5–1pt<br>
+          <b>Color:</b> Okabe-Ito palette (colorblind-safe)<br>
+          <b>Style:</b> Open frame (L-shape, no top/right border)
+        </div>
+      </div>
+      <div class="card-body"><canvas id="vac-nat"></canvas></div>
+    </div>
+
+    <!-- 3. Science / AAAS -->
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-nat">AAAS</span> Science</h3>
+        <div class="specs">
+          <b>Font:</b> Times New Roman / serif, 6–8pt<br>
+          <b>Axes:</b> Thin black, ticks inward<br>
+          <b>Grid:</b> None &nbsp;|&nbsp; <b>Lines:</b> 1pt<br>
+          <b>Color:</b> Muted, B&W distinguishable (line styles)<br>
+          <b>Style:</b> Box frame, compact, dense
+        </div>
+      </div>
+      <div class="card-body"><canvas id="vac-sci"></canvas></div>
+    </div>
+
+    <!-- 4. Elsevier / Acta Materialia -->
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-els">Elsevier</span> Acta Materialia / Scripta</h3>
+        <div class="specs">
+          <b>Font:</b> Arial / Times New Roman<br>
+          <b>Axes:</b> Medium weight, ticks outward<br>
+          <b>Grid:</b> Light gray horizontal lines<br>
+          <b>Lines:</b> 1.5pt, colored with dash differentiation<br>
+          <b>Style:</b> Clean with subtle grid, open frame
+        </div>
+      </div>
+      <div class="card-body"><canvas id="vac-els"></canvas></div>
+    </div>
+
+    <!-- 5. IEEE -->
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-ieee">IEEE</span> IEEE Transactions</h3>
+        <div class="specs">
+          <b>Font:</b> Times New Roman, 8pt<br>
+          <b>Axes:</b> 0.5pt, ticks inward, minor ticks<br>
+          <b>Grid:</b> None &nbsp;|&nbsp; <b>Lines:</b> 0.8pt<br>
+          <b>Color:</b> Must be readable in B&W print<br>
+          <b>Style:</b> Box frame, markers on lines, compact
+        </div>
+      </div>
+      <div class="card-body"><canvas id="vac-ieee"></canvas></div>
+    </div>
+
+    <!-- 6. RSC / Springer / JMR -->
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-rsc">Springer</span> JMR / J. Mater. Sci.</h3>
+        <div class="specs">
+          <b>Font:</b> Arial or Helvetica, 8–10pt<br>
+          <b>Axes:</b> Medium black, ticks inward<br>
+          <b>Grid:</b> None &nbsp;|&nbsp; <b>Lines:</b> 1.5pt<br>
+          <b>Color:</b> Colorblind-safe, distinct styles<br>
+          <b>Style:</b> Box frame, bold axis labels, serif legend
+        </div>
+      </div>
+      <div class="card-body"><canvas id="vac-jmr"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 2: TWIN-AXIS DEPTH PROFILES            -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Depth Profile — Twin Y-Axis (DPA + at%)</div>
+  <div class="grid3">
+
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-aps">APS</span> Physical Review<span class="badge badge-rec">Recommended</span></h3>
+      </div>
+      <div class="card-body"><canvas id="dep-aps"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-nat">Nature</span> Nature / Nature Materials</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-nat"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-nat">AAAS</span> Science</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-sci"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-els">Elsevier</span> Acta Materialia</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-els"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-ieee">IEEE</span> IEEE Transactions</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-ieee"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3><span class="journal j-rsc">Springer</span> JMR / J. Mater. Sci.</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-jmr"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 3: DARK MODE VARIANTS                  -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Dark Mode Variants (for on-screen / presentation use)</div>
+  <div class="grid3">
+
+    <div class="card dark-card">
+      <div class="card-head">
+        <h3><span class="journal j-aps">APS</span> Dark — Vacancy</h3>
+      </div>
+      <div class="card-body"><canvas id="vac-aps-dark"></canvas></div>
+    </div>
+
+    <div class="card dark-card">
+      <div class="card-head">
+        <h3><span class="journal j-nat">Nature</span> Dark — Vacancy</h3>
+      </div>
+      <div class="card-body"><canvas id="vac-nat-dark"></canvas></div>
+    </div>
+
+    <div class="card dark-card">
+      <div class="card-head">
+        <h3><span class="journal j-els">Elsevier</span> Dark — Vacancy</h3>
+      </div>
+      <div class="card-body"><canvas id="vac-els-dark"></canvas></div>
+    </div>
+
+    <div class="card dark-card">
+      <div class="card-head">
+        <h3><span class="journal j-aps">APS</span> Dark — Depth Profile</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-aps-dark"></canvas></div>
+    </div>
+
+    <div class="card dark-card">
+      <div class="card-head">
+        <h3><span class="journal j-nat">Nature</span> Dark — Depth Profile</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-nat-dark"></canvas></div>
+    </div>
+
+    <div class="card dark-card">
+      <div class="card-head">
+        <h3><span class="journal j-els">Elsevier</span> Dark — Depth Profile</h3>
+      </div>
+      <div class="card-body"><canvas id="dep-els-dark"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
+<p class="note">
+  Sources:
+  <a href="https://journals.aps.org/authors/style-basics">APS Style Basics</a> ·
+  <a href="https://journals.aps.org/prl/authors/axis-labels-and-scales-on-graphs-h18">PRL Axis Labels H-18</a> ·
+  <a href="https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/">Nature Figure Specs</a> ·
+  <a href="https://www.elsevier.com/about/policies-and-standards/author/artwork-and-media-instructions/artwork-sizing">Elsevier Artwork</a> ·
+  <a href="https://github.com/garrettj403/SciencePlots">SciencePlots (matplotlib)</a><br>
+  Okabe-Ito palette: #E69F00 · #56B4E9 · #009E73 · #0072B2 · #D55E00 · #CC79A7 · #F0E442
+</p>
+
+<script>
+// ══════════════════════════════════════════════════
+// Sample data — realistic SRIM vacancy profile
+// ══════════════════════════════════════════════════
+function genVacancy() {
+  const pts = [];
+  for (let i = 0; i <= 350; i++) {
+    const x = i * 0.01;
+    const g = Math.exp(-((x - 2.7) ** 2) / (2 * 0.35 ** 2));
+    const r = Math.min(x / 2, 1) * Math.exp(-((x - 1.5) ** 2) / (2 * 1.2 ** 2));
+    const total = 0.75 * g + 0.18 * r;
+    const ions = total * 0.05;
+    pts.push({ x: +x.toFixed(3), total: +total.toFixed(4), ions: +ions.toFixed(4), recoils: +(total - ions).toFixed(4) });
+  }
+  return pts;
+}
+function genDepth() {
+  const pts = [];
+  for (let i = 0; i <= 350; i++) {
+    const x = i * 0.01;
+    const dpa = 12 * Math.exp(-((x - 2.7) ** 2) / (2 * 0.35 ** 2)) + 2.5 * Math.min(x / 2, 1) * Math.exp(-((x - 1.5) ** 2) / (2 * 1.2 ** 2));
+    const at = 0.8 * Math.exp(-((x - 2.5) ** 2) / (2 * 0.3 ** 2));
+    pts.push({ x: +x.toFixed(3), dpa: +dpa.toFixed(3), at: +at.toFixed(4) });
+  }
+  return pts;
+}
+const vd = genVacancy(), dd = genDepth();
+const labels = vd.map(d => d.x);
+
+// ══════════════════════════════════════════════════
+// Style definitions
+// ══════════════════════════════════════════════════
+
+// Okabe-Ito palette
+const OI = { orange: '#E69F00', skyblue: '#56B4E9', green: '#009E73', yellow: '#F0E442', blue: '#0072B2', vermillion: '#D55E00', purple: '#CC79A7', black: '#000000' };
+
+const STYLES = {
+  // ─── APS / Physical Review ───
+  aps: {
+    font: 'Helvetica, Arial, sans-serif',
+    labelSize: 12, tickSize: 10,
+    axisColor: '#000', axisWidth: 1.2, tickLen: 6,
+    gridDisplay: false,
+    lineWidth: 1.5,
+    vac: { total: '#000', recoils: '#555', ions: OI.blue, totalDash: [], recoilsDash: [8,4], ionsDash: [] },
+    dep: { dpa: OI.blue, at: OI.vermillion, dpaDash: [], atDash: [8,4] },
+  },
+  // ─── Nature ───
+  nat: {
+    font: 'Helvetica, Arial, sans-serif',
+    labelSize: 11, tickSize: 9,
+    axisColor: '#333', axisWidth: 0.8, tickLen: 4,
+    gridDisplay: false,
+    lineWidth: 1.2,
+    vac: { total: OI.vermillion, recoils: '#8c8c8c', ions: OI.skyblue, totalDash: [], recoilsDash: [6,3], ionsDash: [] },
+    dep: { dpa: OI.blue, at: OI.vermillion, dpaDash: [], atDash: [6,3] },
+  },
+  // ─── Science / AAAS ───
+  sci: {
+    font: '"Times New Roman", Georgia, serif',
+    labelSize: 11, tickSize: 9,
+    axisColor: '#000', axisWidth: 1.0, tickLen: 5,
+    gridDisplay: false,
+    lineWidth: 1.2,
+    vac: { total: '#000', recoils: '#000', ions: '#000', totalDash: [], recoilsDash: [6,3], ionsDash: [2,2] },
+    dep: { dpa: '#000', at: '#000', dpaDash: [], atDash: [8,4] },
+  },
+  // ─── Elsevier / Acta Materialia ───
+  els: {
+    font: 'Arial, Helvetica, sans-serif',
+    labelSize: 12, tickSize: 10,
+    axisColor: '#333', axisWidth: 1.0, tickLen: 5,
+    gridDisplay: true, gridColor: '#e8e8e8', gridWidth: 0.6,
+    lineWidth: 1.8,
+    vac: { total: OI.vermillion, recoils: OI.green, ions: OI.blue, totalDash: [], recoilsDash: [8,4], ionsDash: [] },
+    dep: { dpa: OI.blue, at: OI.vermillion, dpaDash: [], atDash: [8,4] },
+  },
+  // ─── IEEE ───
+  ieee: {
+    font: '"Times New Roman", Georgia, serif',
+    labelSize: 10, tickSize: 9,
+    axisColor: '#000', axisWidth: 0.8, tickLen: 4,
+    gridDisplay: false,
+    lineWidth: 1.0,
+    markers: true, markerRadius: 2, markerSkip: 12,
+    vac: { total: '#000', recoils: '#666', ions: '#000', totalDash: [], recoilsDash: [6,3], ionsDash: [2,2] },
+    dep: { dpa: '#000', at: '#666', dpaDash: [], atDash: [6,3] },
+  },
+  // ─── Springer / JMR ───
+  jmr: {
+    font: 'Arial, Helvetica, sans-serif',
+    labelSize: 12, tickSize: 10,
+    axisColor: '#000', axisWidth: 1.5, tickLen: 6,
+    gridDisplay: false,
+    lineWidth: 1.8,
+    vac: { total: OI.blue, recoils: OI.orange, ions: OI.green, totalDash: [], recoilsDash: [8,4], ionsDash: [] },
+    dep: { dpa: OI.blue, at: OI.vermillion, dpaDash: [], atDash: [8,4] },
+  },
+};
+
+// Dark mode color overrides
+const DARK_OVERRIDE = {
+  bg: '#1a1a2e',
+  axisColor: '#d1d5db',
+  gridColor: '#2a2a4a',
+};
+
+// ══════════════════════════════════════════════════
+// Chart builders
+// ══════════════════════════════════════════════════
+function buildVacancy(canvasId, styleKey, isDark) {
+  const s = STYLES[styleKey];
+  const ac = isDark ? DARK_OVERRIDE.axisColor : s.axisColor;
+  const bg = isDark ? DARK_OVERRIDE.bg : '#fff';
+  const vc = isDark ? { total: '#f3f4f6', recoils: '#9ca3af', ions: '#60a5fa' } : s.vac;
+  const gc = isDark ? DARK_OVERRIDE.gridColor : (s.gridColor || '#e8e8e8');
+
+  // Sparse markers for IEEE style
+  const makePoints = (color) => {
+    if (!s.markers) return { pointRadius: 0 };
+    const radii = vd.map((_, i) => i % s.markerSkip === 0 ? s.markerRadius : 0);
+    return { pointRadius: radii, pointBackgroundColor: color, pointBorderColor: color, pointBorderWidth: 1 };
+  };
+
+  new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Total', data: vd.map(d => d.total), borderColor: vc.total, borderWidth: s.lineWidth + 0.3, borderDash: vc.totalDash, tension: 0.3, ...makePoints(vc.total) },
+        { label: 'Recoils', data: vd.map(d => d.recoils), borderColor: vc.recoils, borderWidth: s.lineWidth, borderDash: vc.recoilsDash, tension: 0.3, ...makePoints(vc.recoils) },
+        { label: 'Ions', data: vd.map(d => d.ions), borderColor: vc.ions, borderWidth: s.lineWidth, borderDash: vc.ionsDash, tension: 0.3, ...makePoints(vc.ions) },
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      plugins: {
+        legend: { position: 'top', align: 'end', labels: { font: { family: s.font, size: s.tickSize }, color: ac, boxWidth: 20, boxHeight: 2, padding: 8 } },
+        title: { display: true, text: '3 MeV He \u2192 SiC: Vacancy Profile', font: { family: s.font, size: s.labelSize + 2, weight: 'bold' }, color: ac, padding: { bottom: 8 } },
+        tooltip: { enabled: false },
+      },
+      scales: {
+        x: {
+          type: 'linear', min: 0, max: 3.6,
+          title: { display: true, text: 'Depth (\u00b5m)', font: { family: s.font, size: s.labelSize, weight: 'bold' }, color: ac, padding: { top: 4 } },
+          ticks: { font: { family: s.font, size: s.tickSize }, color: ac, maxTicksLimit: 10 },
+          grid: { display: s.gridDisplay, color: gc, lineWidth: s.gridWidth || 0.5 },
+          border: { color: ac, width: s.axisWidth },
+        },
+        y: {
+          min: 0,
+          title: { display: true, text: 'Vacancies (vac/\u00c5\u00b7ion)', font: { family: s.font, size: s.labelSize, weight: 'bold' }, color: ac, padding: { bottom: 4 } },
+          ticks: { font: { family: s.font, size: s.tickSize }, color: ac },
+          grid: { display: s.gridDisplay, color: gc, lineWidth: s.gridWidth || 0.5 },
+          border: { color: ac, width: s.axisWidth },
+        }
+      }
+    },
+    plugins: isDark ? [{ id: 'bg', beforeDraw: (c) => { const {ctx, chartArea:a} = c; ctx.save(); ctx.fillStyle = bg; ctx.fillRect(a.left, a.top, a.width, a.height); ctx.restore(); }}] : []
+  });
+}
+
+function buildDepth(canvasId, styleKey, isDark) {
+  const s = STYLES[styleKey];
+  const ac = isDark ? DARK_OVERRIDE.axisColor : s.axisColor;
+  const bg = isDark ? DARK_OVERRIDE.bg : '#fff';
+  const dc = isDark ? { dpa: '#60a5fa', at: '#f87171', dpaDash: [], atDash: [8,4] } : s.dep;
+  const dpaColor = dc.dpa;
+  const atColor = dc.at;
+  // For Science/IEEE B&W style in light mode, use colored axes anyway for twin-Y readability
+  const dpaAxisColor = (styleKey === 'sci' || styleKey === 'ieee') && !isDark ? OI.blue : dpaColor;
+  const atAxisColor = (styleKey === 'sci' || styleKey === 'ieee') && !isDark ? OI.vermillion : atColor;
+
+  const makePoints = (color) => {
+    if (!s.markers) return { pointRadius: 0 };
+    const radii = dd.map((_, i) => i % s.markerSkip === 0 ? s.markerRadius : 0);
+    return { pointRadius: radii, pointBackgroundColor: color, pointBorderColor: color };
+  };
+
+  new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'DPA', data: dd.map(d => d.dpa), borderColor: dpaColor, borderWidth: s.lineWidth, borderDash: dc.dpaDash, yAxisID: 'y', tension: 0.3, ...makePoints(dpaColor) },
+        { label: 'at%', data: dd.map(d => d.at), borderColor: atColor, borderWidth: s.lineWidth, borderDash: dc.atDash, yAxisID: 'y1', tension: 0.3, ...makePoints(atColor) },
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      plugins: {
+        legend: { position: 'top', align: 'end', labels: { font: { family: s.font, size: s.tickSize }, color: ac, boxWidth: 20, boxHeight: 2, padding: 8 } },
+        title: { display: true, text: '3 MeV He \u2192 SiC: DPA & Atomic Concentration', font: { family: s.font, size: s.labelSize + 2, weight: 'bold' }, color: ac, padding: { bottom: 8 } },
+        tooltip: { enabled: false },
+      },
+      scales: {
+        x: {
+          type: 'linear', min: 0, max: 3.6,
+          title: { display: true, text: 'Depth (\u00b5m)', font: { family: s.font, size: s.labelSize, weight: 'bold' }, color: ac, padding: { top: 4 } },
+          ticks: { font: { family: s.font, size: s.tickSize }, color: ac, maxTicksLimit: 10 },
+          grid: { display: false },
+          border: { color: ac, width: s.axisWidth },
+        },
+        y: {
+          position: 'left', min: 0,
+          title: { display: true, text: 'DPA', font: { family: s.font, size: s.labelSize, weight: 'bold' }, color: dpaAxisColor },
+          ticks: { font: { family: s.font, size: s.tickSize }, color: dpaAxisColor },
+          grid: { display: s.gridDisplay, color: isDark ? DARK_OVERRIDE.gridColor : (s.gridColor || '#e8e8e8'), lineWidth: s.gridWidth || 0.5 },
+          border: { color: dpaAxisColor, width: s.axisWidth },
+        },
+        y1: {
+          position: 'right', min: 0,
+          title: { display: true, text: 'at%', font: { family: s.font, size: s.labelSize, weight: 'bold' }, color: atAxisColor },
+          ticks: { font: { family: s.font, size: s.tickSize }, color: atAxisColor },
+          grid: { display: false },
+          border: { color: atAxisColor, width: s.axisWidth },
+        }
+      }
+    },
+    plugins: isDark ? [{ id: 'bg', beforeDraw: (c) => { const {ctx, chartArea:a} = c; ctx.save(); ctx.fillStyle = bg; ctx.fillRect(a.left, a.top, a.width, a.height); ctx.restore(); }}] : []
+  });
+}
+
+// ══════════════════════════════════════════════════
+// Render all charts
+// ══════════════════════════════════════════════════
+// Light mode vacancy
+['aps','nat','sci','els','ieee','jmr'].forEach(k => buildVacancy('vac-' + k, k, false));
+// Light mode depth
+['aps','nat','sci','els','ieee','jmr'].forEach(k => buildDepth('dep-' + k, k, false));
+// Dark mode
+['aps','nat','els'].forEach(k => { buildVacancy('vac-' + k + '-dark', k, true); buildDepth('dep-' + k + '-dark', k, true); });
+</script>
+</body>
+</html>
