@@ -1,3 +1,4 @@
+import { useRef, useCallback } from "react";
 import {
   ComposedChart, LineChart, Line, XAxis, YAxis,
   Tooltip, Legend, ResponsiveContainer,
@@ -54,6 +55,214 @@ function fmtEnergy(keV) {
 }
 
 // ═══════════════════════════════════════════════════
+// Chart Download (SVG → Canvas → PNG)
+// ═══════════════════════════════════════════════════
+// legendItems: [{ label, color, dash, strokeWidth }]
+// If not passed, legend is extracted from the DOM to match on-screen order.
+
+function extractLegendFromDOM(containerEl) {
+  const items = [];
+  const legendEls = containerEl.querySelectorAll(".recharts-legend-item");
+  legendEls.forEach(li => {
+    const lineEl = li.querySelector("line");
+    const spanEl = li.querySelector("span");
+    if (spanEl) {
+      items.push({
+        label: spanEl.textContent,
+        color: lineEl?.getAttribute("stroke") || spanEl.style.color || "#000",
+        dash: lineEl?.getAttribute("stroke-dasharray") || "",
+        strokeWidth: parseFloat(lineEl?.getAttribute("stroke-width")) || 1.5,
+      });
+    }
+  });
+  return items;
+}
+
+function downloadChartPng(containerEl, filename, bgColor, fontFamily, titleColor, legendItems, legendFontSize) {
+  if (!containerEl) return;
+
+  // Find the largest SVG (the recharts chart), skip tiny icon SVGs
+  const allSvgs = containerEl.querySelectorAll("svg");
+  let svg = null;
+  let maxArea = 0;
+  allSvgs.forEach(s => {
+    const r = s.getBoundingClientRect();
+    const area = r.width * r.height;
+    if (area > maxArea) { maxArea = area; svg = s; }
+  });
+  if (!svg) return;
+
+  const titleEl = containerEl.querySelector("[data-chart-title]");
+  const captionEl = containerEl.querySelector("[data-chart-caption]");
+  const titleText = titleEl?.textContent || "";
+  const captionText = captionEl?.textContent || "";
+
+  const rect = svg.getBoundingClientRect();
+  const w = rect.width;
+  const h = rect.height;
+
+  const titleH = titleText ? 44 : 0;
+  const captionH = captionText ? 28 : 0;
+  const pad = 12;
+  const totalH = titleH + h + captionH + pad;
+
+  // Clone SVG and set explicit pixel dimensions + viewBox
+  const clone = svg.cloneNode(true);
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  clone.setAttribute("width", w);
+  clone.setAttribute("height", totalH);
+  clone.setAttribute("viewBox", `0 0 ${w} ${totalH}`);
+
+  // Inline computed styles on all text elements (fonts don't survive serialization)
+  const origTexts = svg.querySelectorAll("text");
+  const cloneTexts = clone.querySelectorAll("text");
+  origTexts.forEach((orig, i) => {
+    if (!cloneTexts[i]) return;
+    const cs = window.getComputedStyle(orig);
+    cloneTexts[i].setAttribute("font-family", cs.fontFamily);
+    cloneTexts[i].setAttribute("font-size", cs.fontSize);
+    cloneTexts[i].setAttribute("font-weight", cs.fontWeight);
+  });
+
+  const ns = "http://www.w3.org/2000/svg";
+
+  // Wrap existing chart content in a <g> shifted down for title
+  const g = document.createElementNS(ns, "g");
+  g.setAttribute("transform", `translate(0, ${titleH})`);
+  while (clone.firstChild) g.appendChild(clone.firstChild);
+
+  // Background
+  const bgRect = document.createElementNS(ns, "rect");
+  bgRect.setAttribute("width", w);
+  bgRect.setAttribute("height", totalH);
+  bgRect.setAttribute("fill", bgColor);
+  clone.appendChild(bgRect);
+
+  // Title
+  if (titleText) {
+    const t = document.createElementNS(ns, "text");
+    t.setAttribute("x", w / 2);
+    t.setAttribute("y", 30);
+    t.setAttribute("text-anchor", "middle");
+    t.setAttribute("font-family", fontFamily);
+    t.setAttribute("font-size", "20");
+    t.setAttribute("font-weight", "bold");
+    t.setAttribute("fill", titleColor || "#000");
+    t.textContent = titleText;
+    clone.appendChild(t);
+  }
+
+  // Chart content (after bg and title so it renders on top)
+  clone.appendChild(g);
+
+  // Legend — read from DOM to preserve on-screen order, fall back to passed items
+  const resolvedLegend = extractLegendFromDOM(containerEl);
+  const finalLegend = resolvedLegend.length ? resolvedLegend : legendItems;
+  if (finalLegend && finalLegend.length) {
+    const legendItemsRef = finalLegend;
+    const fontSize = legendFontSize || 12;
+    const lineLen = 24;
+    const gap = 8;
+    const itemSpacing = 16;
+
+    // Measure total legend width to center it
+    // Approximate: lineLen + gap + label char width + itemSpacing
+    const charWidth = fontSize * 0.6;
+    let totalLegendW = 0;
+    legendItemsRef.forEach((item, i) => {
+      totalLegendW += lineLen + gap + item.label.length * charWidth;
+      if (i < legendItemsRef.length - 1) totalLegendW += itemSpacing;
+    });
+
+    const legendY = titleH + 18;
+    let lx = (w - totalLegendW) / 2;
+    const legendG = document.createElementNS(ns, "g");
+
+    legendItemsRef.forEach((item, i) => {
+      // Line sample
+      const line = document.createElementNS(ns, "line");
+      line.setAttribute("x1", lx);
+      line.setAttribute("y1", legendY);
+      line.setAttribute("x2", lx + lineLen);
+      line.setAttribute("y2", legendY);
+      line.setAttribute("stroke", item.color);
+      line.setAttribute("stroke-width", item.strokeWidth || 1.5);
+      if (item.dash) line.setAttribute("stroke-dasharray", item.dash);
+      legendG.appendChild(line);
+
+      // Label
+      const text = document.createElementNS(ns, "text");
+      text.setAttribute("x", lx + lineLen + gap);
+      text.setAttribute("y", legendY + fontSize * 0.35);
+      text.setAttribute("font-family", fontFamily);
+      text.setAttribute("font-size", fontSize);
+      text.setAttribute("fill", titleColor || "#000");
+      text.textContent = item.label;
+      legendG.appendChild(text);
+
+      lx += lineLen + gap + item.label.length * charWidth + itemSpacing;
+    });
+
+    clone.appendChild(legendG);
+  }
+
+  // Caption
+  if (captionText) {
+    const c = document.createElementNS(ns, "text");
+    c.setAttribute("x", w - 16);
+    c.setAttribute("y", totalH - 8);
+    c.setAttribute("text-anchor", "end");
+    c.setAttribute("font-family", fontFamily);
+    c.setAttribute("font-size", "11");
+    c.setAttribute("font-style", "italic");
+    c.setAttribute("fill", titleColor || "#888");
+    c.textContent = captionText;
+    clone.appendChild(c);
+  }
+
+  // Serialize → Image → Canvas → PNG at 2x for retina
+  const svgString = new XMLSerializer().serializeToString(clone);
+  const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const scale = 2;
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = w * scale;
+    canvas.height = totalH * scale;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(scale, scale);
+    ctx.drawImage(img, 0, 0, w, totalH);
+    canvas.toBlob((pngBlob) => {
+      const a = document.createElement("a");
+      a.download = filename;
+      a.href = URL.createObjectURL(pngBlob);
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, "image/png");
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+function DownloadButton({ onClick, dark }) {
+  return (
+    <button
+      onClick={onClick}
+      title="Download as PNG"
+      className={`px-3 py-1 text-xs rounded border transition-colors ${
+        dark
+          ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+          : "border-gray-300 text-gray-600 hover:bg-gray-100"
+      }`}
+    >
+      Download PNG
+    </button>
+  );
+}
+
+// ═══════════════════════════════════════════════════
 // Journal Style Definitions
 // ═══════════════════════════════════════════════════
 // Okabe-Ito colorblind-safe palette (Nature-recommended)
@@ -67,7 +276,7 @@ export const JOURNAL_STYLES = {
     label: "APS (Phys. Rev.)",
     desc: "Helvetica, no grid, 1.2pt axes, ticks inward, units in parentheses",
     font: 'Helvetica, Arial, sans-serif',
-    titleSize: 15, labelSize: 13, tickSize: 11, legendSize: 11,
+    titleSize: 20, labelSize: 17, tickSize: 14, legendSize: 11,
     axisWidth: 1.2, lineWidth: 1.5, lineWidthBold: 1.8,
     grid: false,
     light: {
@@ -87,9 +296,9 @@ export const JOURNAL_STYLES = {
   },
   nature: {
     label: "Nature",
-    desc: "Helvetica 5-7pt, thin 0.8pt axes, open frame, Okabe-Ito colors",
+    desc: "Helvetica, thin 0.8pt axes, open frame, Okabe-Ito colors",
     font: 'Helvetica, Arial, sans-serif',
-    titleSize: 14, labelSize: 12, tickSize: 10, legendSize: 10,
+    titleSize: 19, labelSize: 16, tickSize: 13, legendSize: 13,
     axisWidth: 0.8, lineWidth: 1.2, lineWidthBold: 1.5,
     grid: false,
     light: {
@@ -111,7 +320,7 @@ export const JOURNAL_STYLES = {
     label: "Science (AAAS)",
     desc: "Times New Roman, B&W with dash patterns, box frame, 1pt lines",
     font: '"Times New Roman", Georgia, serif',
-    titleSize: 15, labelSize: 13, tickSize: 11, legendSize: 11,
+    titleSize: 20, labelSize: 17, tickSize: 14, legendSize: 14,
     axisWidth: 1.0, lineWidth: 1.2, lineWidthBold: 1.5,
     grid: false,
     light: {
@@ -133,7 +342,7 @@ export const JOURNAL_STYLES = {
     label: "Elsevier (Acta Mat.)",
     desc: "Arial, light gray grid, 1.8pt colored lines, Okabe-Ito palette",
     font: 'Arial, Helvetica, sans-serif',
-    titleSize: 15, labelSize: 13, tickSize: 11, legendSize: 11,
+    titleSize: 20, labelSize: 17, tickSize: 14, legendSize: 14,
     axisWidth: 1.0, lineWidth: 1.8, lineWidthBold: 2.0,
     grid: true, gridColor: { light: "#e8e8e8", dark: "#2a2a4a" }, gridWidth: 0.6,
     light: {
@@ -155,7 +364,7 @@ export const JOURNAL_STYLES = {
     label: "IEEE",
     desc: "Times New Roman, B&W readable, 0.8pt axes, dash+marker differentiation",
     font: '"Times New Roman", Georgia, serif',
-    titleSize: 14, labelSize: 12, tickSize: 10, legendSize: 10,
+    titleSize: 19, labelSize: 16, tickSize: 13, legendSize: 13,
     axisWidth: 0.8, lineWidth: 1.0, lineWidthBold: 1.2,
     grid: false,
     light: {
@@ -177,7 +386,7 @@ export const JOURNAL_STYLES = {
     label: "Springer (JMR)",
     desc: "Arial, bold 1.5pt axes, no grid, Okabe-Ito blue/orange/green",
     font: 'Arial, Helvetica, sans-serif',
-    titleSize: 15, labelSize: 13, tickSize: 11, legendSize: 11,
+    titleSize: 20, labelSize: 17, tickSize: 14, legendSize: 14,
     axisWidth: 1.5, lineWidth: 1.8, lineWidthBold: 2.0,
     grid: false,
     light: {
@@ -212,6 +421,7 @@ function getStyle(journalStyle, dark) {
 export function VacancyChart({ vacancy, meta, dark, journalStyle = DEFAULT_JOURNAL }) {
   if (!vacancy) return null;
   const { j, c, gc } = getStyle(journalStyle, dark);
+  const chartRef = useRef(null);
 
   const data = vacancy.depth_A.map((d, i) => ({
     depth_um: d / 1e4,
@@ -230,16 +440,28 @@ export function VacancyChart({ vacancy, meta, dark, journalStyle = DEFAULT_JOURN
     ? `${fmtEnergy(meta.energy_keV)} ${meta.ion} \u2192 ${meta.target}: Vacancy Profile`
     : null;
 
+  const handleDownload = useCallback(() => {
+    const name = meta?.ion
+      ? `vacancy_${meta.ion}_${meta.target}_${meta.energy_keV}keV_${journalStyle}.png`
+      : `vacancy_profile_${journalStyle}.png`;
+    const legend = [
+      { label: "Total", color: c.total, dash: c.totalDash, strokeWidth: j.lineWidthBold },
+      { label: "Recoils", color: c.recoils, dash: c.recoilsDash, strokeWidth: j.lineWidth },
+      { label: "Ions", color: c.ions, dash: c.ionsDash, strokeWidth: j.lineWidth },
+    ];
+    downloadChartPng(chartRef.current, name, c.bg, j.font, c.axis, legend, j.legendSize);
+  }, [c, j, meta, journalStyle]);
+
   return (
-    <div>
+    <div ref={chartRef}>
       {title && (
-        <p style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
+        <p data-chart-title style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
           {title}
         </p>
       )}
       <div style={{ background: c.bg, padding: "12px 4px 4px 0" }}>
         <ResponsiveContainer width="100%" height={380}>
-          <LineChart data={trimmed} margin={{ top: 8, right: 24, left: 16, bottom: 48 }}>
+          <LineChart data={trimmed} margin={{ top: 8, right: 24, left: 24, bottom: 48 }}>
             <XAxis
               dataKey="depth_um"
               stroke={c.axis}
@@ -255,7 +477,7 @@ export function VacancyChart({ vacancy, meta, dark, journalStyle = DEFAULT_JOURN
               tick={{ fill: c.tick, fontFamily: j.font, fontSize: j.tickSize }}
               tickLine={{ stroke: c.axis, strokeWidth: j.axisWidth * 0.7 }}
               tickFormatter={fmtTick}
-              label={{ value: "Vacancies (vac/\u00c5\u00b7ion)", angle: -90, position: "insideLeft", offset: 4, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold" } }}
+              label={{ value: "Vacancies (vac/\u00c5\u00b7ion)", angle: -90, position: "center", dx: -20, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold", textAnchor: "middle" } }}
             />
             <Tooltip
               contentStyle={{ backgroundColor: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 0, fontFamily: j.font, fontSize: j.tickSize, color: c.tick }}
@@ -269,6 +491,9 @@ export function VacancyChart({ vacancy, meta, dark, journalStyle = DEFAULT_JOURN
           </LineChart>
         </ResponsiveContainer>
       </div>
+      <div className="flex justify-end mt-2">
+        <DownloadButton onClick={handleDownload} dark={dark} />
+      </div>
     </div>
   );
 }
@@ -280,6 +505,7 @@ export function DepthProfileChart({ profiles, n, fluence, meta, dark, journalSty
   const data = mergeProfileData(profiles, n, fluence);
   if (!data || !data.length) return null;
   const { j, c, gc } = getStyle(journalStyle, dark);
+  const chartRef = useRef(null);
 
   const maxDpa = Math.max(...data.map((d) => d.dpa));
   const maxAt = Math.max(...data.map((d) => d.atPct));
@@ -293,16 +519,27 @@ export function DepthProfileChart({ profiles, n, fluence, meta, dark, journalSty
     ? `${fmtEnergy(meta.energy_keV)} ${meta.ion} \u2192 ${meta.target}: DPA & Atomic Concentration`
     : null;
 
+  const handleDownload = useCallback(() => {
+    const name = meta?.ion
+      ? `depth_profile_${meta.ion}_${meta.target}_${meta.energy_keV}keV_${journalStyle}.png`
+      : `depth_profile_${journalStyle}.png`;
+    const legend = [
+      { label: "DPA", color: c.dpa, dash: c.dpaDash, strokeWidth: j.lineWidth },
+      { label: "at%", color: c.atPct, dash: c.atDash, strokeWidth: j.lineWidth },
+    ];
+    downloadChartPng(chartRef.current, name, c.bg, j.font, c.axis, legend, j.legendSize);
+  }, [c, j, meta, journalStyle]);
+
   return (
-    <div>
+    <div ref={chartRef}>
       {title && (
-        <p style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
+        <p data-chart-title style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
           {title}
         </p>
       )}
       <div style={{ background: c.bg, padding: "12px 4px 4px 0" }}>
         <ResponsiveContainer width="100%" height={400}>
-          <ComposedChart data={trimmed} margin={{ top: 8, right: 16, left: 16, bottom: 48 }}>
+          <ComposedChart data={trimmed} margin={{ top: 8, right: 24, left: 24, bottom: 48 }}>
             <XAxis
               dataKey="depth_um"
               stroke={c.axis}
@@ -320,7 +557,7 @@ export function DepthProfileChart({ profiles, n, fluence, meta, dark, journalSty
               tickLine={{ stroke: c.dpa, strokeWidth: j.axisWidth * 0.7 }}
               tickFormatter={fmtTick}
               domain={[0, maxDpa * 1.05]}
-              label={{ value: "DPA", angle: -90, position: "insideLeft", offset: 8, style: { fill: c.dpa, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold" } }}
+              label={{ value: "DPA", angle: -90, position: "center", dx: -20, style: { fill: c.dpa, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold", textAnchor: "middle" } }}
             />
             <YAxis
               yAxisId="right"
@@ -331,7 +568,7 @@ export function DepthProfileChart({ profiles, n, fluence, meta, dark, journalSty
               tickLine={{ stroke: c.atPct, strokeWidth: j.axisWidth * 0.7 }}
               tickFormatter={fmtTick}
               domain={[0, maxAt * 1.05]}
-              label={{ value: "at%", angle: 90, position: "insideRight", offset: 8, style: { fill: c.atPct, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold" } }}
+              label={{ value: "at%", angle: 90, position: "center", dx: 20, style: { fill: c.atPct, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold", textAnchor: "middle" } }}
             />
             <Tooltip
               contentStyle={{ backgroundColor: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 0, fontFamily: j.font, fontSize: j.tickSize, color: c.tick }}
@@ -344,10 +581,12 @@ export function DepthProfileChart({ profiles, n, fluence, meta, dark, journalSty
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <p style={{ fontFamily: j.font, fontSize: 10, fontStyle: "italic", color: c.recoils, marginTop: 4, textAlign: "right", paddingRight: 8 }}>
-        Scaled to {fluence.toExponential(2)} ions/cm²
-      </p>
+      <div className="flex justify-between items-center mt-2">
+        <p data-chart-caption style={{ fontFamily: j.font, fontSize: 10, fontStyle: "italic", color: c.recoils, paddingLeft: 8 }}>
+          Scaled to {fluence.toExponential(2)} ions/cm²
+        </p>
+        <DownloadButton onClick={handleDownload} dark={dark} />
+      </div>
     </div>
   );
 }
-

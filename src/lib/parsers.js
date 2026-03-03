@@ -206,9 +206,11 @@ export function parseRangeProfile(text) {
 }
 
 export function parseSrimMetadata(text) {
-  const mIon = text.match(/Ion\s*=\s*(\w+)\s+Energy\s*=\s*(\d+)\s*keV/);
-  const ion = mIon ? mIon[1] : null;
-  const energy = mIon ? parseInt(mIon[2]) : null;
+  // Match "Ion = Ni  Energy = 200 keV" or "Energy = 200.00 keV" or "Energy = 2.00E+02 keV"
+  const mIon = text.match(/Ion\s*=\s*(\w+)\s+Energy\s*=\s*([\d.]+(?:[Ee][+-]?\d+)?)\s*keV/);
+  if (!mIon) return null; // no valid header found — lets || fallback try next file
+  const ion = mIon[1];
+  const energy = Math.round(parseFloat(mIon[2]));
   const elements = [];
   const re = /Layer\s*#\s*\d+-\s*(\w+)\s*=\s*[\d.]+\s+Atomic Percent/g;
   let m;

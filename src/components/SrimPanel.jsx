@@ -15,7 +15,8 @@ export default function SrimPanel({ srim, setSrim, setProfiles, setSrimMeta, pro
 
   const isSrimFile = (name) => {
     const upper = name.toUpperCase();
-    return upper.includes("E2RECOIL") || upper.includes("VACANCY") || upper.includes("RANGE");
+    // Only accept .txt files — skip .sav and other binary formats
+    return upper.endsWith(".TXT") && (upper.includes("E2RECOIL") || upper.includes("VACANCY") || upper.includes("RANGE"));
   };
 
   const processFiles = useCallback((files) => {
@@ -54,7 +55,8 @@ export default function SrimPanel({ srim, setSrim, setProfiles, setSrimMeta, pro
         if (upper.includes("RANGE")) {
           const { B, depth } = parseBPeak(text);
           if (B) { newSrim.B = B; newSrim.depthPeak = depth; }
-          rangeProfile = parseRangeProfile(text);
+          const rp = parseRangeProfile(text);
+          if (rp) rangeProfile = rp;
           comp = comp || parseTargetComposition(text);
           metaInfo = metaInfo || parseSrimMetadata(text);
         }
