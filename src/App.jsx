@@ -155,7 +155,20 @@ export default function App() {
 
         <ReferenceSection />
 
-        <p className="text-center text-xs text-gray-400 dark:text-gray-500 pt-2 pb-4">
+        <div className="flex justify-center pt-3 pb-1">
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScmW5gQ5fPfRUkH5BBUYrkmfH8Y4NorO-LD2xOEKM7SS-ODcQ/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:border-red-300 dark:hover:border-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+              <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+            </svg>
+            Report a Bug
+          </a>
+        </div>
+        <p className="text-center text-xs text-gray-400 dark:text-gray-500 pt-1 pb-4">
           Formulas validated against Implanter & Tandem compute notebooks · Angle/raster logic from dose calculator spreadsheet
         </p>
       </div>

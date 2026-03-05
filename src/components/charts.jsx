@@ -1,8 +1,10 @@
-import { useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   ComposedChart, LineChart, Line, XAxis, YAxis,
   Tooltip, Legend, ResponsiveContainer,
 } from "recharts";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 // ═══════════════════════════════════════════════════
 // Utilities
@@ -246,19 +248,66 @@ function downloadChartPng(containerEl, filename, bgColor, fontFamily, titleColor
   img.src = url;
 }
 
-function DownloadButton({ onClick, dark }) {
+function downloadChartPdf(containerEl, filename, bgColor) {
+  if (!containerEl) return;
+  html2canvas(containerEl, {
+    backgroundColor: bgColor,
+    scale: 2,
+    useCORS: true,
+    logging: false,
+  }).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
+    const imgW = canvas.width;
+    const imgH = canvas.height;
+    const orientation = imgW > imgH ? "landscape" : "portrait";
+    const pdf = new jsPDF({ orientation, unit: "px", format: [imgW, imgH] });
+    pdf.addImage(imgData, "PNG", 0, 0, imgW, imgH);
+    pdf.save(filename);
+  });
+}
+
+function DownloadButton({ onPng, onPdf, dark }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const itemCls = `w-full text-left px-3 py-1.5 text-xs transition-colors ${
+    dark
+      ? "text-gray-300 hover:bg-gray-700"
+      : "text-gray-600 hover:bg-gray-100"
+  }`;
+
   return (
-    <button
-      onClick={onClick}
-      title="Download as PNG"
-      className={`px-3 py-1 text-xs rounded border transition-colors ${
-        dark
-          ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-          : "border-gray-300 text-gray-600 hover:bg-gray-100"
-      }`}
-    >
-      Download PNG
-    </button>
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(!open)}
+        className={`px-3 py-1 text-xs rounded border transition-colors inline-flex items-center gap-1 ${
+          dark
+            ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+            : "border-gray-300 text-gray-600 hover:bg-gray-100"
+        }`}
+      >
+        Download
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
+          <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+        </svg>
+      </button>
+      {open && (
+        <div className={`absolute right-0 bottom-full mb-1 rounded border shadow-lg z-10 min-w-[120px] overflow-hidden ${
+          dark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-300"
+        }`}>
+          <button className={itemCls} onClick={() => { setOpen(false); onPng(); }}>PNG image</button>
+          <button className={itemCls} onClick={() => { setOpen(false); onPdf(); }}>PDF document</button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -453,46 +502,57 @@ export function VacancyChart({ vacancy, meta, dark, journalStyle = DEFAULT_JOURN
   }, [c, j, meta, journalStyle]);
 
   return (
-    <div ref={chartRef}>
-      {title && (
-        <p data-chart-title style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
-          {title}
-        </p>
-      )}
-      <div style={{ background: c.bg, padding: "12px 4px 4px 0" }}>
-        <ResponsiveContainer width="100%" height={380}>
-          <LineChart data={trimmed} margin={{ top: 8, right: 24, left: 24, bottom: 48 }}>
-            <XAxis
-              dataKey="depth_um"
-              stroke={c.axis}
-              strokeWidth={j.axisWidth}
-              tick={{ fill: c.tick, fontFamily: j.font, fontSize: j.tickSize }}
-              tickLine={{ stroke: c.axis, strokeWidth: j.axisWidth * 0.7 }}
-              tickFormatter={fmtTick}
-              label={{ value: "Depth (\u00b5m)", position: "bottom", offset: 4, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold" } }}
-            />
-            <YAxis
-              stroke={c.axis}
-              strokeWidth={j.axisWidth}
-              tick={{ fill: c.tick, fontFamily: j.font, fontSize: j.tickSize }}
-              tickLine={{ stroke: c.axis, strokeWidth: j.axisWidth * 0.7 }}
-              tickFormatter={fmtTick}
-              label={{ value: "Vacancies (vac/\u00c5\u00b7ion)", angle: -90, position: "center", dx: -20, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold", textAnchor: "middle" } }}
-            />
-            <Tooltip
-              contentStyle={{ backgroundColor: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 0, fontFamily: j.font, fontSize: j.tickSize, color: c.tick }}
-              labelFormatter={(v) => `Depth: ${fmtTick(v)} \u00b5m`}
-              formatter={(value, name) => [fmtTick(value), name]}
-            />
-            <Legend wrapperStyle={{ fontFamily: j.font, fontSize: j.legendSize }} verticalAlign="top" iconType="plainline" iconSize={20} />
-            <Line type="monotone" dataKey="total" name="Total" stroke={c.total} dot={false} strokeWidth={j.lineWidthBold} strokeDasharray={c.totalDash || undefined} />
-            <Line type="monotone" dataKey="recoils" name="Recoils" stroke={c.recoils} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.recoilsDash || undefined} />
-            <Line type="monotone" dataKey="ions" name="Ions" stroke={c.ions} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.ionsDash || undefined} />
-          </LineChart>
-        </ResponsiveContainer>
+    <div>
+      <div ref={chartRef}>
+        {title && (
+          <p data-chart-title style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
+            {title}
+          </p>
+        )}
+        <div style={{ background: c.bg, padding: "12px 4px 4px 0" }}>
+          <ResponsiveContainer width="100%" height={380}>
+            <LineChart data={trimmed} margin={{ top: 8, right: 24, left: 24, bottom: 48 }}>
+              <XAxis
+                dataKey="depth_um"
+                stroke={c.axis}
+                strokeWidth={j.axisWidth}
+                tick={{ fill: c.tick, fontFamily: j.font, fontSize: j.tickSize }}
+                tickLine={{ stroke: c.axis, strokeWidth: j.axisWidth * 0.7 }}
+                tickFormatter={fmtTick}
+                label={{ value: "Depth (\u00b5m)", position: "bottom", offset: 4, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold" } }}
+              />
+              <YAxis
+                stroke={c.axis}
+                strokeWidth={j.axisWidth}
+                tick={{ fill: c.tick, fontFamily: j.font, fontSize: j.tickSize }}
+                tickLine={{ stroke: c.axis, strokeWidth: j.axisWidth * 0.7 }}
+                tickFormatter={fmtTick}
+                label={{ value: "Vacancies (vac/\u00c5\u00b7ion)", angle: -90, position: "center", dx: -20, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold", textAnchor: "middle" } }}
+              />
+              <Tooltip
+                contentStyle={{ backgroundColor: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 0, fontFamily: j.font, fontSize: j.tickSize, color: c.tick }}
+                labelFormatter={(v) => `Depth: ${fmtTick(v)} \u00b5m`}
+                formatter={(value, name) => [fmtTick(value), name]}
+              />
+              <Legend wrapperStyle={{ fontFamily: j.font, fontSize: j.legendSize }} verticalAlign="top" iconType="plainline" iconSize={20} />
+              <Line type="monotone" dataKey="total" name="Total" stroke={c.total} dot={false} strokeWidth={j.lineWidthBold} strokeDasharray={c.totalDash || undefined} />
+              <Line type="monotone" dataKey="recoils" name="Recoils" stroke={c.recoils} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.recoilsDash || undefined} />
+              <Line type="monotone" dataKey="ions" name="Ions" stroke={c.ions} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.ionsDash || undefined} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
       <div className="flex justify-end mt-2">
-        <DownloadButton onClick={handleDownload} dark={dark} />
+        <DownloadButton
+          onPng={handleDownload}
+          onPdf={() => {
+            const name = meta?.ion
+              ? `vacancy_${meta.ion}_${meta.target}_${meta.energy_keV}keV_${journalStyle}.pdf`
+              : `vacancy_profile_${journalStyle}.pdf`;
+            downloadChartPdf(chartRef.current, name, c.bg);
+          }}
+          dark={dark}
+        />
       </div>
     </div>
   );
@@ -531,61 +591,72 @@ export function DepthProfileChart({ profiles, n, fluence, meta, dark, journalSty
   }, [c, j, meta, journalStyle]);
 
   return (
-    <div ref={chartRef}>
-      {title && (
-        <p data-chart-title style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
-          {title}
-        </p>
-      )}
-      <div style={{ background: c.bg, padding: "12px 4px 4px 0" }}>
-        <ResponsiveContainer width="100%" height={400}>
-          <ComposedChart data={trimmed} margin={{ top: 8, right: 24, left: 24, bottom: 48 }}>
-            <XAxis
-              dataKey="depth_um"
-              stroke={c.axis}
-              strokeWidth={j.axisWidth}
-              tick={{ fill: c.tick, fontFamily: j.font, fontSize: j.tickSize }}
-              tickLine={{ stroke: c.axis, strokeWidth: j.axisWidth * 0.7 }}
-              tickFormatter={fmtTick}
-              label={{ value: "Depth (\u00b5m)", position: "bottom", offset: 4, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold" } }}
-            />
-            <YAxis
-              yAxisId="left"
-              stroke={c.dpa}
-              strokeWidth={j.axisWidth}
-              tick={{ fill: c.dpa, fontFamily: j.font, fontSize: j.tickSize }}
-              tickLine={{ stroke: c.dpa, strokeWidth: j.axisWidth * 0.7 }}
-              tickFormatter={fmtTick}
-              domain={[0, maxDpa * 1.05]}
-              label={{ value: "DPA", angle: -90, position: "center", dx: -20, style: { fill: c.dpa, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold", textAnchor: "middle" } }}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              stroke={c.atPct}
-              strokeWidth={j.axisWidth}
-              tick={{ fill: c.atPct, fontFamily: j.font, fontSize: j.tickSize }}
-              tickLine={{ stroke: c.atPct, strokeWidth: j.axisWidth * 0.7 }}
-              tickFormatter={fmtTick}
-              domain={[0, maxAt * 1.05]}
-              label={{ value: "at%", angle: 90, position: "center", dx: 20, style: { fill: c.atPct, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold", textAnchor: "middle" } }}
-            />
-            <Tooltip
-              contentStyle={{ backgroundColor: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 0, fontFamily: j.font, fontSize: j.tickSize, color: c.tick }}
-              labelFormatter={(v) => `Depth: ${fmtTick(v)} \u00b5m`}
-              formatter={(value, name) => [fmtTick(value), name]}
-            />
-            <Legend wrapperStyle={{ fontFamily: j.font, fontSize: j.legendSize }} verticalAlign="top" iconType="plainline" iconSize={20} />
-            <Line yAxisId="left" type="monotone" dataKey="dpa" name="DPA" stroke={c.dpa} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.dpaDash || undefined} />
-            <Line yAxisId="right" type="monotone" dataKey="atPct" name="at%" stroke={c.atPct} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.atDash || undefined} />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="flex justify-between items-center mt-2">
-        <p data-chart-caption style={{ fontFamily: j.font, fontSize: 10, fontStyle: "italic", color: c.recoils, paddingLeft: 8 }}>
+    <div>
+      <div ref={chartRef}>
+        {title && (
+          <p data-chart-title style={{ fontFamily: j.font, fontSize: j.titleSize, fontWeight: "bold", color: c.axis, marginBottom: 8, textAlign: "center" }}>
+            {title}
+          </p>
+        )}
+        <div style={{ background: c.bg, padding: "12px 4px 4px 0" }}>
+          <ResponsiveContainer width="100%" height={400}>
+            <ComposedChart data={trimmed} margin={{ top: 8, right: 24, left: 24, bottom: 48 }}>
+              <XAxis
+                dataKey="depth_um"
+                stroke={c.axis}
+                strokeWidth={j.axisWidth}
+                tick={{ fill: c.tick, fontFamily: j.font, fontSize: j.tickSize }}
+                tickLine={{ stroke: c.axis, strokeWidth: j.axisWidth * 0.7 }}
+                tickFormatter={fmtTick}
+                label={{ value: "Depth (\u00b5m)", position: "bottom", offset: 4, style: { fill: c.axis, fontFamily: j.font, fontSize: j.labelSize, fontWeight: "bold" } }}
+              />
+              <YAxis
+                yAxisId="left"
+                stroke={c.dpa}
+                strokeWidth={j.axisWidth}
+                tick={{ fill: c.dpa, fontFamily: j.font, fontSize: j.tickSize }}
+                tickLine={{ stroke: c.dpa, strokeWidth: j.axisWidth * 0.7 }}
+                tickFormatter={fmtTick}
+                domain={[0, maxDpa * 1.05]}
+                label={{ value: "DPA", angle: -90, position: "center", dx: -20, style: { fill: c.dpa, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold", textAnchor: "middle" } }}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                stroke={c.atPct}
+                strokeWidth={j.axisWidth}
+                tick={{ fill: c.atPct, fontFamily: j.font, fontSize: j.tickSize }}
+                tickLine={{ stroke: c.atPct, strokeWidth: j.axisWidth * 0.7 }}
+                tickFormatter={fmtTick}
+                domain={[0, maxAt * 1.05]}
+                label={{ value: "at%", angle: 90, position: "center", dx: 20, style: { fill: c.atPct, fontFamily: j.font, fontSize: j.labelSize + 1, fontWeight: "bold", textAnchor: "middle" } }}
+              />
+              <Tooltip
+                contentStyle={{ backgroundColor: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 0, fontFamily: j.font, fontSize: j.tickSize, color: c.tick }}
+                labelFormatter={(v) => `Depth: ${fmtTick(v)} \u00b5m`}
+                formatter={(value, name) => [fmtTick(value), name]}
+              />
+              <Legend wrapperStyle={{ fontFamily: j.font, fontSize: j.legendSize }} verticalAlign="top" iconType="plainline" iconSize={20} />
+              <Line yAxisId="left" type="monotone" dataKey="dpa" name="DPA" stroke={c.dpa} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.dpaDash || undefined} />
+              <Line yAxisId="right" type="monotone" dataKey="atPct" name="at%" stroke={c.atPct} dot={false} strokeWidth={j.lineWidth} strokeDasharray={c.atDash || undefined} />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+        <p data-chart-caption style={{ fontFamily: j.font, fontSize: 10, fontStyle: "italic", color: c.recoils, paddingLeft: 8, marginTop: 8 }}>
           Scaled to {fluence.toExponential(2)} ions/cm²
         </p>
-        <DownloadButton onClick={handleDownload} dark={dark} />
+      </div>
+      <div className="flex justify-end mt-2">
+        <DownloadButton
+          onPng={handleDownload}
+          onPdf={() => {
+            const name = meta?.ion
+              ? `depth_profile_${meta.ion}_${meta.target}_${meta.energy_keV}keV_${journalStyle}.pdf`
+              : `depth_profile_${journalStyle}.pdf`;
+            downloadChartPdf(chartRef.current, name, c.bg);
+          }}
+          dark={dark}
+        />
       </div>
     </div>
   );
