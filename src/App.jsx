@@ -75,16 +75,18 @@ export default function App() {
                   <path d="M -60 72 Q -70 68, -76 72" stroke="#D97706" strokeWidth="2" strokeLinecap="round" fill="none"/>
                   <path d="M -65 80 Q -75 78, -80 82" stroke="#CC6A00" strokeWidth="2" strokeLinecap="round" fill="none"/>
                   <path d="M -66 90 Q -76 88, -80 92" stroke="#D97706" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-                  {/* Tail */}
-                  <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" strokeWidth="6" strokeLinecap="round" fill="none"/>
+                  {/* Neck */}
                   <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" strokeWidth="24" strokeLinecap="round"/>
                   <ellipse cx="79" cy="-14" rx="21" ry="18" fill="#FF8200"/>
                   <circle cx="86" cy="-17" r="9" fill="white" stroke={dark ? "none" : "#d1d5db"} strokeWidth="0.5"/>
                   <circle cx="88" cy="-17" r="5.5" fill={dark ? "#0f172a" : "#1a1a2e"}/>
                   <circle cx="90" cy="-19.5" r="2" fill="white"/>
                   <path d="M 97 -10 Q 118 -24, 142 -10 Q 152 -2, 154 8 Q 154 14, 148 14 Q 140 4, 130 -2 Q 112 -10, 97 -3 Z" fill="#2d1b0e" stroke={dark ? "#8B5E3C" : "#5C3D2E"} strokeWidth="2.5"/>
+                  {/* Legs + feet */}
                   <line x1="46" y1="134" x2="36" y2="170" stroke="#CC6A00" strokeWidth="8" strokeLinecap="round"/>
                   <line x1="64" y1="132" x2="56" y2="170" stroke="#CC6A00" strokeWidth="8" strokeLinecap="round"/>
+                  <path d="M 36 170 L 24 178 M 36 170 L 42 180 M 36 170 L 32 179" stroke="#CC6A00" strokeWidth="5" strokeLinecap="round"/>
+                  <path d="M 56 170 L 44 178 M 56 170 L 62 180 M 56 170 L 52 179" stroke="#CC6A00" strokeWidth="5" strokeLinecap="round"/>
                 </g>
               </svg>
             </div>
