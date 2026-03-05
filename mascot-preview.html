@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IBIS — Atomic Emblem (No Text)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 2rem;
+  }
+  h1 { text-align: center; font-size: 2rem; margin-bottom: 0.25rem; }
+  .subtitle { text-align: center; color: #94a3b8; margin-bottom: 2rem; font-size: 0.95rem; }
+  .section-title {
+    text-align: center; font-size: 1.3rem; margin: 2.5rem 0 1.5rem;
+    padding-top: 1.5rem; border-top: 1px solid #334155; color: #FF8200;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+  .card h2 { font-size: 1.1rem; margin-bottom: 0.3rem; color: #FF8200; }
+  .card .desc { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem; }
+  .card svg { margin: 0 auto; display: block; }
+  .size-row { display: flex; gap: 1.5rem; justify-content: center; align-items: flex-end; margin-top: 1.5rem; flex-wrap: wrap; }
+  .size-box { text-align: center; }
+  .size-box .label { font-size: 0.65rem; color: #64748b; margin-top: 0.4rem; }
+  .bg-dark { background: #0f172a; border-radius: 10px; padding: 12px; display: inline-block; }
+  .bg-light { background: #ffffff; border-radius: 10px; padding: 12px; display: inline-block; }
+  .header-mock {
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .header-mock.light { background: white; }
+  .header-mock.dark { background: #0f172a; border: 1px solid #334155; }
+  .full-width { grid-column: 1 / -1; max-width: 900px; margin: 0 auto; }
+  .note { text-align:center; color:#64748b; margin-top:2rem; font-size:0.8rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<h1>IBIS — Atomic Emblem</h1>
+<p class="subtitle">Orbits through ring &bull; No text on emblem &bull; Tennessee Orange #FF8200</p>
+
+<!-- ============================================================ -->
+<p class="section-title">Full Size</p>
+<!-- ============================================================ -->
+
+<div class="grid">
+
+<div class="card">
+  <h2>Dark Background</h2>
+  <p class="desc">Primary version — orbits weave through the badge ring</p>
+
+  <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Orbit behind badge -->
+    <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-30 150 150)" stroke="#0072B2" stroke-width="1.8" opacity="0.3" stroke-dasharray="5 4"/>
+
+    <!-- BADGE — solid fill to mask orbits behind bird, ring on top -->
+    <circle cx="150" cy="150" r="120" fill="#0f172a" opacity="0.9"/>
+    <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="2.5"/>
+    <circle cx="150" cy="150" r="113" fill="none" stroke="#FF8200" stroke-width="0.7" opacity="0.2"/>
+    <circle cx="150" cy="150" r="112" fill="#FF8200" opacity="0.03"/>
+
+    <!-- Orbits in FRONT — crossing over the ring -->
+    <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="2" opacity="0.35" stroke-dasharray="5 4"/>
+    <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-5 150 150)" stroke="#0072B2" stroke-width="1.8" opacity="0.3"/>
+
+    <!-- Electrons -->
+    <circle cx="16" cy="130" r="5" fill="#0072B2" opacity="0.45"/>
+    <circle cx="16" cy="130" r="3" fill="#56B4E9" opacity="0.8"/>
+    <circle cx="280" cy="175" r="5" fill="#0072B2" opacity="0.45"/>
+    <circle cx="280" cy="175" r="3" fill="#56B4E9" opacity="0.8"/>
+    <circle cx="105" cy="260" r="5" fill="#0072B2" opacity="0.45"/>
+    <circle cx="105" cy="260" r="3" fill="#56B4E9" opacity="0.8"/>
+
+    <!-- IBIS BIRD -->
+    <g transform="translate(82, 52)">
+      <!-- Body -->
+      <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+      <!-- Elegant trailing wing -->
+      <path d="M 48 84 Q 28 72, 5 68 Q -15 66, -35 74 Q -15 70, 8 74 Q 28 78, 46 84 Z" fill="#FF8200"/>
+      <path d="M 5 68 Q -20 60, -45 62 Q -55 64, -60 72 Q -48 66, -30 68 Q -10 70, 8 74 Z" fill="#E5750A"/>
+      <path d="M 0 72 Q -25 65, -50 68 Q -62 72, -65 80 Q -52 74, -35 72 Q -12 72, 4 76 Z" fill="#D97706"/>
+      <path d="M -5 76 Q -28 72, -52 76 Q -64 80, -66 90 Q -54 82, -38 78 Q -16 76, 0 80 Z" fill="#E5750A"/>
+      <path d="M -8 82 Q -30 78, -50 84 Q -60 88, -62 96 Q -52 90, -36 86 Q -18 82, -4 84 Z" fill="#CC6A00"/>
+      <path d="M -60 72 Q -70 68, -76 72" stroke="#D97706" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M -65 80 Q -75 78, -80 82" stroke="#CC6A00" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M -66 90 Q -76 88, -80 92" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <!-- Tail -->
+      <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M 20 126 Q 6 148, 2 166" stroke="#CC6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M 26 130 Q 14 150, 10 168" stroke="#E5750A" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+      <!-- Neck -->
+      <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10"
+            fill="none" stroke="#FF8200" stroke-width="14" stroke-linecap="round"/>
+      <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10"
+            fill="none" stroke="#E5750A" stroke-width="0.8" opacity="0.3"/>
+
+      <!-- Head -->
+      <ellipse cx="79" cy="-14" rx="15" ry="12.5" fill="#FF8200"/>
+
+      <!-- Eye -->
+      <circle cx="85" cy="-17" r="6" fill="white" stroke="#CC6A00" stroke-width="0.6"/>
+      <circle cx="86.5" cy="-17" r="3.2" fill="#1a1a2e"/>
+      <circle cx="88" cy="-19" r="1.2" fill="white"/>
+
+      <!-- Beak -->
+      <path d="M 93 -12
+               Q 110 -20, 130 -13
+               Q 140 -8, 142 0
+               Q 144 5, 140 7
+               Q 135 2, 130 -3
+               Q 112 -10, 93 -6 Z"
+            fill="#2d1b0e" stroke="#8B5E3C" stroke-width="0.8"/>
+      <path d="M 97 -10 Q 115 -16, 136 -4" fill="none" stroke="#5C3D2E" stroke-width="0.6"/>
+      <circle cx="102" cy="-11" r="0.8" fill="#5C3D2E"/>
+
+      <!-- Legs -->
+      <line x1="46" y1="134" x2="36" y2="176" stroke="#CC6A00" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="64" y1="132" x2="56" y2="176" stroke="#CC6A00" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Knees -->
+      <circle cx="41" cy="155" r="2.2" fill="#CC6A00"/>
+      <circle cx="60" cy="154" r="2.2" fill="#CC6A00"/>
+      <!-- Feet -->
+      <path d="M 36 176 L 26 182 M 36 176 L 40 184 M 36 176 L 32 183" stroke="#CC6A00" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 56 176 L 46 182 M 56 176 L 60 184 M 56 176 L 52 183" stroke="#CC6A00" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Nucleus glow -->
+    <circle cx="150" cy="150" r="5" fill="#FF8200" opacity="0.06"/>
+    <circle cx="150" cy="150" r="2.5" fill="#FF8200" opacity="0.12"/>
+  </svg>
+</div>
+
+<div class="card">
+  <h2>Light Background</h2>
+  <p class="desc">Same design on white — beak and eye stay visible</p>
+
+  <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="background: white; border-radius: 12px;">
+    <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-30 150 150)" stroke="#0072B2" stroke-width="1.8" opacity="0.2" stroke-dasharray="5 4"/>
+
+    <circle cx="150" cy="150" r="120" fill="white" opacity="0.92"/>
+    <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="2.5"/>
+    <circle cx="150" cy="150" r="113" fill="none" stroke="#FF8200" stroke-width="0.7" opacity="0.15"/>
+    <circle cx="150" cy="150" r="112" fill="#FF8200" opacity="0.02"/>
+
+    <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="2" opacity="0.22" stroke-dasharray="5 4"/>
+    <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-5 150 150)" stroke="#0072B2" stroke-width="1.8" opacity="0.2"/>
+
+    <circle cx="16" cy="130" r="5" fill="#0072B2" opacity="0.3"/>
+    <circle cx="16" cy="130" r="3" fill="#0072B2" opacity="0.55"/>
+    <circle cx="280" cy="175" r="5" fill="#0072B2" opacity="0.3"/>
+    <circle cx="280" cy="175" r="3" fill="#0072B2" opacity="0.55"/>
+    <circle cx="105" cy="260" r="5" fill="#0072B2" opacity="0.3"/>
+    <circle cx="105" cy="260" r="3" fill="#0072B2" opacity="0.55"/>
+
+    <g transform="translate(82, 52)">
+      <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+      <!-- Elegant trailing wing -->
+      <path d="M 48 84 Q 28 72, 5 68 Q -15 66, -35 74 Q -15 70, 8 74 Q 28 78, 46 84 Z" fill="#FF8200"/>
+      <path d="M 5 68 Q -20 60, -45 62 Q -55 64, -60 72 Q -48 66, -30 68 Q -10 70, 8 74 Z" fill="#E5750A"/>
+      <path d="M 0 72 Q -25 65, -50 68 Q -62 72, -65 80 Q -52 74, -35 72 Q -12 72, 4 76 Z" fill="#D97706"/>
+      <path d="M -5 76 Q -28 72, -52 76 Q -64 80, -66 90 Q -54 82, -38 78 Q -16 76, 0 80 Z" fill="#E5750A"/>
+      <path d="M -8 82 Q -30 78, -50 84 Q -60 88, -62 96 Q -52 90, -36 86 Q -18 82, -4 84 Z" fill="#CC6A00"/>
+      <path d="M -60 72 Q -70 68, -76 72" stroke="#D97706" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M -65 80 Q -75 78, -80 82" stroke="#CC6A00" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M -66 90 Q -76 88, -80 92" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <!-- Tail -->
+      <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M 20 126 Q 6 148, 2 166" stroke="#CC6A00" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M 26 130 Q 14 150, 10 168" stroke="#E5750A" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="14" stroke-linecap="round"/>
+      <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#E5750A" stroke-width="0.8" opacity="0.3"/>
+      <ellipse cx="79" cy="-14" rx="15" ry="12.5" fill="#FF8200"/>
+      <circle cx="85" cy="-17" r="6" fill="white" stroke="#d1d5db" stroke-width="0.6"/>
+      <circle cx="86.5" cy="-17" r="3.2" fill="#1a1a2e"/>
+      <circle cx="88" cy="-19" r="1.2" fill="white"/>
+      <path d="M 93 -12 Q 110 -20, 130 -13 Q 140 -8, 142 0 Q 144 5, 140 7 Q 135 2, 130 -3 Q 112 -10, 93 -6 Z" fill="#2d1b0e" stroke="#5C3D2E" stroke-width="0.8"/>
+      <path d="M 97 -10 Q 115 -16, 136 -4" fill="none" stroke="#5C3D2E" stroke-width="0.6"/>
+      <circle cx="102" cy="-11" r="0.8" fill="#5C3D2E"/>
+      <line x1="46" y1="134" x2="36" y2="176" stroke="#CC6A00" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="64" y1="132" x2="56" y2="176" stroke="#CC6A00" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="41" cy="155" r="2.2" fill="#CC6A00"/>
+      <circle cx="60" cy="154" r="2.2" fill="#CC6A00"/>
+      <path d="M 36 176 L 26 182 M 36 176 L 40 184 M 36 176 L 32 183" stroke="#CC6A00" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 56 176 L 46 182 M 56 176 L 60 184 M 56 176 L 52 183" stroke="#CC6A00" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+  </svg>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<p class="section-title">Size Ladder</p>
+<!-- ============================================================ -->
+
+<div class="grid">
+
+<div class="card">
+  <h2>Dark Backgrounds</h2>
+  <p class="desc">Progressive feature scaling — strokes thicken as size shrinks</p>
+
+  <div class="size-row">
+    <!-- 120px -->
+    <div class="size-box">
+      <div class="bg-dark">
+        <svg width="120" height="120" viewBox="0 0 300 300" fill="none">
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-30 150 150)" stroke="#0072B2" stroke-width="2" opacity="0.32" stroke-dasharray="5 4"/>
+          <circle cx="150" cy="150" r="120" fill="#0f172a" opacity="0.9"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="3"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="2.2" opacity="0.35" stroke-dasharray="5 4"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-5 150 150)" stroke="#0072B2" stroke-width="2" opacity="0.3"/>
+          <circle cx="16" cy="130" r="5" fill="#56B4E9" opacity="0.7"/>
+          <circle cx="280" cy="175" r="5" fill="#56B4E9" opacity="0.7"/>
+          <circle cx="105" cy="260" r="5" fill="#56B4E9" opacity="0.7"/>
+          <g transform="translate(82, 52)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+            <path d="M 35 94 Q 16 110, 8 132 Q 14 118, 30 100 Z" fill="#D97706"/>
+            <path d="M 40 99 Q 22 118, 14 140 Q 22 126, 36 106 Z" fill="#E5750A"/>
+            <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M 20 126 Q 6 148, 2 166" stroke="#CC6A00" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="15" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="16" ry="13" fill="#FF8200"/>
+            <circle cx="85" cy="-17" r="6.5" fill="white"/>
+            <circle cx="86.5" cy="-17" r="3.5" fill="#1a1a2e"/>
+            <circle cx="88" cy="-19" r="1.3" fill="white"/>
+            <path d="M 94 -12 Q 112 -21, 132 -12 Q 142 -6, 144 2 Q 146 7, 142 8 Q 136 2, 130 -3 Q 112 -10, 94 -5 Z" fill="#2d1b0e" stroke="#8B5E3C" stroke-width="1"/>
+            <line x1="46" y1="134" x2="36" y2="176" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="56" y2="176" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 36 176 L 26 183 M 36 176 L 40 184 M 36 176 L 32 183" stroke="#CC6A00" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 56 176 L 46 183 M 56 176 L 60 184 M 56 176 L 52 183" stroke="#CC6A00" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">120px</div>
+    </div>
+
+    <!-- 80px -->
+    <div class="size-box">
+      <div class="bg-dark">
+        <svg width="80" height="80" viewBox="0 0 300 300" fill="none">
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-30 150 150)" stroke="#0072B2" stroke-width="3" opacity="0.32"/>
+          <circle cx="150" cy="150" r="120" fill="#0f172a" opacity="0.9"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="4"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="3" opacity="0.35"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-5 150 150)" stroke="#0072B2" stroke-width="2.5" opacity="0.3"/>
+          <circle cx="16" cy="130" r="6" fill="#56B4E9" opacity="0.6"/>
+          <circle cx="280" cy="175" r="6" fill="#56B4E9" opacity="0.6"/>
+          <g transform="translate(82, 52)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+            <path d="M 35 94 Q 16 110, 8 132 Q 14 118, 30 100 Z" fill="#D97706"/>
+            <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M 20 126 Q 6 148, 2 166" stroke="#CC6A00" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="18" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="18" ry="15" fill="#FF8200"/>
+            <circle cx="86" cy="-17" r="7.5" fill="white"/>
+            <circle cx="87.5" cy="-17" r="4.2" fill="#1a1a2e"/>
+            <circle cx="89.5" cy="-19.5" r="1.6" fill="white"/>
+            <path d="M 95 -11 Q 114 -22, 136 -12 Q 146 -5, 148 4 Q 150 10, 145 10 Q 138 2, 130 -3 Q 112 -10, 95 -4 Z" fill="#2d1b0e" stroke="#8B5E3C" stroke-width="1.5"/>
+            <line x1="46" y1="134" x2="36" y2="174" stroke="#CC6A00" stroke-width="6" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="56" y2="174" stroke="#CC6A00" stroke-width="6" stroke-linecap="round"/>
+            <path d="M 36 174 L 24 182 M 36 174 L 40 184" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 56 174 L 44 182 M 56 174 L 60 184" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">80px</div>
+    </div>
+
+    <!-- 48px -->
+    <div class="size-box">
+      <div class="bg-dark">
+        <svg width="48" height="48" viewBox="0 0 300 300" fill="none">
+          <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(-28 150 150)" stroke="#0072B2" stroke-width="4.5" opacity="0.32"/>
+          <circle cx="150" cy="150" r="120" fill="#0f172a" opacity="0.9"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="5"/>
+          <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="4.5" opacity="0.35"/>
+          <g transform="translate(82, 55)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+            <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="24" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="21" ry="18" fill="#FF8200"/>
+            <circle cx="86" cy="-17" r="9" fill="white"/>
+            <circle cx="88" cy="-17" r="5.5" fill="#1a1a2e"/>
+            <circle cx="90" cy="-19.5" r="2" fill="white"/>
+            <path d="M 97 -10 Q 118 -24, 142 -10 Q 152 -2, 154 8 Q 154 14, 148 14 Q 140 4, 130 -2 Q 112 -10, 97 -3 Z" fill="#2d1b0e" stroke="#8B5E3C" stroke-width="2.5"/>
+            <line x1="46" y1="134" x2="36" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="56" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">48px</div>
+    </div>
+
+    <!-- 32px -->
+    <div class="size-box">
+      <div class="bg-dark">
+        <svg width="32" height="32" viewBox="0 0 300 300" fill="none">
+          <ellipse cx="150" cy="150" rx="140" ry="40" transform="rotate(-25 150 150)" stroke="#0072B2" stroke-width="6" opacity="0.32"/>
+          <circle cx="150" cy="150" r="120" fill="#0f172a" opacity="0.9"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="8"/>
+          <ellipse cx="150" cy="150" rx="140" ry="40" transform="rotate(28 150 150)" stroke="#0072B2" stroke-width="6" opacity="0.32"/>
+          <g transform="translate(82, 58)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="28" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="24" ry="21" fill="#FF8200"/>
+            <circle cx="87" cy="-17" r="11" fill="white"/>
+            <circle cx="89" cy="-17" r="7" fill="#1a1a2e"/>
+            <circle cx="92" cy="-20" r="3" fill="white"/>
+            <path d="M 99 -8 Q 122 -24, 148 -8 Q 160 2, 162 14 Q 162 20, 154 20 Q 144 6, 130 -2 Q 112 -10, 99 -1 Z" fill="#2d1b0e" stroke="#A0714F" stroke-width="4"/>
+            <line x1="46" y1="134" x2="38" y2="165" stroke="#CC6A00" stroke-width="12" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="58" y2="165" stroke="#CC6A00" stroke-width="12" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">32px favicon</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Light Backgrounds</h2>
+  <p class="desc">Same sizes on white — eye gets subtle border, orbits soften</p>
+
+  <div class="size-row">
+    <!-- 120px light -->
+    <div class="size-box">
+      <div class="bg-light">
+        <svg width="120" height="120" viewBox="0 0 300 300" fill="none">
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-30 150 150)" stroke="#0072B2" stroke-width="2" opacity="0.2" stroke-dasharray="5 4"/>
+          <circle cx="150" cy="150" r="120" fill="white" opacity="0.92"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="3"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="2.2" opacity="0.22" stroke-dasharray="5 4"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-5 150 150)" stroke="#0072B2" stroke-width="2" opacity="0.2"/>
+          <circle cx="16" cy="130" r="5" fill="#0072B2" opacity="0.4"/>
+          <circle cx="280" cy="175" r="5" fill="#0072B2" opacity="0.4"/>
+          <circle cx="105" cy="260" r="5" fill="#0072B2" opacity="0.4"/>
+          <g transform="translate(82, 52)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+            <path d="M 35 94 Q 16 110, 8 132 Q 14 118, 30 100 Z" fill="#D97706"/>
+            <path d="M 40 99 Q 22 118, 14 140 Q 22 126, 36 106 Z" fill="#E5750A"/>
+            <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M 20 126 Q 6 148, 2 166" stroke="#CC6A00" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="15" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="16" ry="13" fill="#FF8200"/>
+            <circle cx="85" cy="-17" r="6.5" fill="white" stroke="#d1d5db" stroke-width="0.5"/>
+            <circle cx="86.5" cy="-17" r="3.5" fill="#1a1a2e"/>
+            <circle cx="88" cy="-19" r="1.3" fill="white"/>
+            <path d="M 94 -12 Q 112 -21, 132 -12 Q 142 -6, 144 2 Q 146 7, 142 8 Q 136 2, 130 -3 Q 112 -10, 94 -5 Z" fill="#2d1b0e" stroke="#5C3D2E" stroke-width="1"/>
+            <line x1="46" y1="134" x2="36" y2="176" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="56" y2="176" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 36 176 L 26 183 M 36 176 L 40 184 M 36 176 L 32 183" stroke="#CC6A00" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 56 176 L 46 183 M 56 176 L 60 184 M 56 176 L 52 183" stroke="#CC6A00" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">120px</div>
+    </div>
+
+    <!-- 80px light -->
+    <div class="size-box">
+      <div class="bg-light">
+        <svg width="80" height="80" viewBox="0 0 300 300" fill="none">
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-30 150 150)" stroke="#0072B2" stroke-width="3" opacity="0.2"/>
+          <circle cx="150" cy="150" r="120" fill="white" opacity="0.92"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="4"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="3" opacity="0.22"/>
+          <ellipse cx="150" cy="150" rx="140" ry="36" transform="rotate(-5 150 150)" stroke="#0072B2" stroke-width="2.5" opacity="0.2"/>
+          <g transform="translate(82, 52)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+            <path d="M 35 94 Q 16 110, 8 132 Q 14 118, 30 100 Z" fill="#D97706"/>
+            <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M 20 126 Q 6 148, 2 166" stroke="#CC6A00" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="18" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="18" ry="15" fill="#FF8200"/>
+            <circle cx="86" cy="-17" r="7.5" fill="white" stroke="#d1d5db" stroke-width="0.5"/>
+            <circle cx="87.5" cy="-17" r="4.2" fill="#1a1a2e"/>
+            <circle cx="89.5" cy="-19.5" r="1.6" fill="white"/>
+            <path d="M 95 -11 Q 114 -22, 136 -12 Q 146 -5, 148 4 Q 150 10, 145 10 Q 138 2, 130 -3 Q 112 -10, 95 -4 Z" fill="#2d1b0e" stroke="#5C3D2E" stroke-width="1.5"/>
+            <line x1="46" y1="134" x2="36" y2="174" stroke="#CC6A00" stroke-width="6" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="56" y2="174" stroke="#CC6A00" stroke-width="6" stroke-linecap="round"/>
+            <path d="M 36 174 L 24 182 M 36 174 L 40 184" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 56 174 L 44 182 M 56 174 L 60 184" stroke="#CC6A00" stroke-width="4.5" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">80px</div>
+    </div>
+
+    <!-- 48px light -->
+    <div class="size-box">
+      <div class="bg-light">
+        <svg width="48" height="48" viewBox="0 0 300 300" fill="none">
+          <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(-28 150 150)" stroke="#0072B2" stroke-width="4.5" opacity="0.2"/>
+          <circle cx="150" cy="150" r="120" fill="white" opacity="0.92"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="5"/>
+          <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="4.5" opacity="0.22"/>
+          <g transform="translate(82, 55)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+            <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="24" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="21" ry="18" fill="#FF8200"/>
+            <circle cx="86" cy="-17" r="9" fill="white" stroke="#d1d5db" stroke-width="0.5"/>
+            <circle cx="88" cy="-17" r="5.5" fill="#1a1a2e"/>
+            <circle cx="90" cy="-19.5" r="2" fill="white"/>
+            <path d="M 97 -10 Q 118 -24, 142 -10 Q 152 -2, 154 8 Q 154 14, 148 14 Q 140 4, 130 -2 Q 112 -10, 97 -3 Z" fill="#2d1b0e" stroke="#5C3D2E" stroke-width="2.5"/>
+            <line x1="46" y1="134" x2="36" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="56" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">48px</div>
+    </div>
+
+    <!-- 32px light -->
+    <div class="size-box">
+      <div class="bg-light">
+        <svg width="32" height="32" viewBox="0 0 300 300" fill="none">
+          <circle cx="150" cy="150" r="120" fill="white" opacity="0.92"/>
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="8"/>
+          <ellipse cx="150" cy="150" rx="140" ry="40" transform="rotate(-25 150 150)" stroke="#0072B2" stroke-width="6" opacity="0.2"/>
+          <ellipse cx="150" cy="150" rx="140" ry="40" transform="rotate(28 150 150)" stroke="#0072B2" stroke-width="6" opacity="0.2"/>
+          <g transform="translate(82, 58)">
+            <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+            <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="28" stroke-linecap="round"/>
+            <ellipse cx="79" cy="-14" rx="24" ry="21" fill="#FF8200"/>
+            <circle cx="87" cy="-17" r="11" fill="white"/>
+            <circle cx="89" cy="-17" r="7" fill="#1a1a2e"/>
+            <circle cx="92" cy="-20" r="3" fill="white"/>
+            <path d="M 99 -8 Q 122 -24, 148 -8 Q 160 2, 162 14 Q 162 20, 154 20 Q 144 6, 130 -2 Q 112 -10, 99 -1 Z" fill="#2d1b0e" stroke="#5C3D2E" stroke-width="4"/>
+            <line x1="46" y1="134" x2="38" y2="165" stroke="#CC6A00" stroke-width="12" stroke-linecap="round"/>
+            <line x1="64" y1="132" x2="58" y2="165" stroke="#CC6A00" stroke-width="12" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">32px favicon</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<p class="section-title">Header Mockups</p>
+<!-- ============================================================ -->
+
+<div class="grid">
+<div class="card full-width">
+  <h2>Site Header — Light Mode</h2>
+  <p class="desc">Emblem at 44px next to title text</p>
+
+  <div class="header-mock light">
+    <svg width="44" height="44" viewBox="0 0 300 300" fill="none">
+      <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(-28 150 150)" stroke="#0072B2" stroke-width="4" opacity="0.2"/>
+      <circle cx="150" cy="150" r="120" fill="white" opacity="0.92"/>
+      <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="5"/>
+      <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="4" opacity="0.22"/>
+      <g transform="translate(82, 55)">
+        <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+        <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+        <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="24" stroke-linecap="round"/>
+        <ellipse cx="79" cy="-14" rx="21" ry="18" fill="#FF8200"/>
+        <circle cx="86" cy="-17" r="9" fill="white" stroke="#d1d5db" stroke-width="0.5"/>
+        <circle cx="88" cy="-17" r="5.5" fill="#1a1a2e"/>
+        <circle cx="90" cy="-19.5" r="2" fill="white"/>
+        <path d="M 97 -10 Q 118 -24, 142 -10 Q 152 -2, 154 8 Q 154 14, 148 14 Q 140 4, 130 -2 Q 112 -10, 97 -3 Z" fill="#2d1b0e" stroke="#5C3D2E" stroke-width="2.5"/>
+        <line x1="46" y1="134" x2="36" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+        <line x1="64" y1="132" x2="56" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div style="text-align: left;">
+      <div style="font-family: Georgia, serif; font-size: 1.3rem; color: #1e293b; font-weight: bold;">IBIS</div>
+      <div style="font-size: 0.7rem; color: #64748b; letter-spacing: 0.5px;">Ion Beam Irradiation Simulator</div>
+    </div>
+    <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
+      <div style="font-family: Georgia, serif; font-size: 0.75rem; color: #94a3b8; background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">TIBML</div>
+      <div style="width: 28px; height: 28px; background: #FF8200; border-radius: 4px; display:flex; align-items:center; justify-content:center;">
+        <span style="color:white; font-weight:bold; font-family: Georgia, serif; font-size: 14px;">T</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="margin-top: 2rem;">Site Header — Dark Mode</h2>
+  <p class="desc">Same emblem adapts to dark background</p>
+
+  <div class="header-mock dark">
+    <svg width="44" height="44" viewBox="0 0 300 300" fill="none">
+      <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(-28 150 150)" stroke="#0072B2" stroke-width="4" opacity="0.35"/>
+      <circle cx="150" cy="150" r="120" fill="#0f172a" opacity="0.9"/>
+      <circle cx="150" cy="150" r="120" fill="none" stroke="#FF8200" stroke-width="5"/>
+      <ellipse cx="150" cy="150" rx="140" ry="38" transform="rotate(25 150 150)" stroke="#0072B2" stroke-width="4" opacity="0.35"/>
+      <g transform="translate(82, 55)">
+        <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
+        <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+        <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" stroke-width="24" stroke-linecap="round"/>
+        <ellipse cx="79" cy="-14" rx="21" ry="18" fill="#FF8200"/>
+        <circle cx="86" cy="-17" r="9" fill="white"/>
+        <circle cx="88" cy="-17" r="5.5" fill="#0f172a"/>
+        <circle cx="90" cy="-19.5" r="2" fill="white"/>
+        <path d="M 97 -10 Q 118 -24, 142 -10 Q 152 -2, 154 8 Q 154 14, 148 14 Q 140 4, 130 -2 Q 112 -10, 97 -3 Z" fill="#2d1b0e" stroke="#8B5E3C" stroke-width="2.5"/>
+        <line x1="46" y1="134" x2="36" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+        <line x1="64" y1="132" x2="56" y2="170" stroke="#CC6A00" stroke-width="8" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div style="text-align: left;">
+      <div style="font-family: Georgia, serif; font-size: 1.3rem; color: #f1f5f9; font-weight: bold;">IBIS</div>
+      <div style="font-size: 0.7rem; color: #94a3b8; letter-spacing: 0.5px;">Ion Beam Irradiation Simulator</div>
+    </div>
+    <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
+      <div style="font-family: Georgia, serif; font-size: 0.75rem; color: #94a3b8; background: #1e293b; padding: 4px 10px; border-radius: 6px;">TIBML</div>
+      <div style="width: 28px; height: 28px; background: #FF8200; border-radius: 4px; display:flex; align-items:center; justify-content:center;">
+        <span style="color:white; font-weight:bold; font-family: Georgia, serif; font-size: 14px;">T</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<p class="note">
+  Tennessee Orange <strong>#FF8200</strong> &bull;
+  Beak: <strong>#2d1b0e</strong> + <strong>#8B5E3C</strong> stroke &bull;
+  Orbits: <strong>#0072B2</strong> dashed, weaving through ring &bull;
+  Electrons: <strong>#56B4E9</strong> glow dots
+</p>
+
+</body>
+</html>

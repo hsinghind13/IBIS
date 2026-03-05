@@ -66,7 +66,16 @@ export default function App() {
                 <circle cx="195" cy="290" r="6" fill={dark ? "#56B4E9" : "#0072B2"} opacity={dark ? "0.65" : "0.4"}/>
                 <g transform="translate(82, 55)">
                   <path d="M 60 82 Q 86 58, 92 76 Q 100 96, 86 122 Q 70 142, 44 138 Q 18 133, 12 114 Q 6 96, 24 82 Q 38 72, 60 82 Z" fill="#FF8200"/>
-                  <path d="M 30 88 Q 10 102, 2 126 Q 8 110, 24 94 Z" fill="#E5750A"/>
+                  {/* Elegant trailing wing */}
+                  <path d="M 48 84 Q 28 72, 5 68 Q -15 66, -35 74 Q -15 70, 8 74 Q 28 78, 46 84 Z" fill="#FF8200"/>
+                  <path d="M 5 68 Q -20 60, -45 62 Q -55 64, -60 72 Q -48 66, -30 68 Q -10 70, 8 74 Z" fill="#E5750A"/>
+                  <path d="M 0 72 Q -25 65, -50 68 Q -62 72, -65 80 Q -52 74, -35 72 Q -12 72, 4 76 Z" fill="#D97706"/>
+                  <path d="M -5 76 Q -28 72, -52 76 Q -64 80, -66 90 Q -54 82, -38 78 Q -16 76, 0 80 Z" fill="#E5750A"/>
+                  <path d="M -8 82 Q -30 78, -50 84 Q -60 88, -62 96 Q -52 90, -36 86 Q -18 82, -4 84 Z" fill="#CC6A00"/>
+                  <path d="M -60 72 Q -70 68, -76 72" stroke="#D97706" strokeWidth="2" strokeLinecap="round" fill="none"/>
+                  <path d="M -65 80 Q -75 78, -80 82" stroke="#CC6A00" strokeWidth="2" strokeLinecap="round" fill="none"/>
+                  <path d="M -66 90 Q -76 88, -80 92" stroke="#D97706" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                  {/* Tail */}
                   <path d="M 14 120 Q -2 142, -6 162" stroke="#E5750A" strokeWidth="6" strokeLinecap="round" fill="none"/>
                   <path d="M 74 74 C 82 48, 80 26, 72 10 C 70 4, 72 -4, 77 -10" fill="none" stroke="#FF8200" strokeWidth="24" strokeLinecap="round"/>
                   <ellipse cx="79" cy="-14" rx="21" ry="18" fill="#FF8200"/>
