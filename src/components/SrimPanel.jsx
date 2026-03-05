@@ -12,6 +12,7 @@ export default function SrimPanel({ srim, setSrim, setProfiles, setSrimMeta, pro
   const [parsedMeta, setParsedMeta] = useState(null);
   const [composition, setComposition] = useState(null);
   const [chartView, setChartView] = useState("vacancy");
+  const [foundFiles, setFoundFiles] = useState(null); // { e2recoil, vacancy, range }
 
   const isSrimFile = (name) => {
     const upper = name.toUpperCase();
@@ -37,15 +38,18 @@ export default function SrimPanel({ srim, setSrim, setProfiles, setSrimMeta, pro
       let rangeProfile = null;
       let comp = null;
       let directN = null;
+      const found = { e2recoil: false, vacancy: false, range: false };
 
       for (const { name, text } of results) {
         const upper = name.toUpperCase();
         if (upper.includes("E2RECOIL")) {
+          found.e2recoil = true;
           directN = parseAtomicDensity(text);
           comp = comp || parseTargetComposition(text);
           metaInfo = metaInfo || parseSrimMetadata(text);
         }
         if (upper.includes("VACANCY")) {
+          found.vacancy = true;
           const dpi = parseDPIPeak(text);
           if (dpi) newSrim.dpi = dpi;
           vacancyProfile = parseVacancyProfile(text);
@@ -53,6 +57,7 @@ export default function SrimPanel({ srim, setSrim, setProfiles, setSrimMeta, pro
           metaInfo = metaInfo || parseSrimMetadata(text);
         }
         if (upper.includes("RANGE")) {
+          found.range = true;
           const { B, depth } = parseBPeak(text);
           if (B) { newSrim.B = B; newSrim.depthPeak = depth; }
           const rp = parseRangeProfile(text);
@@ -69,6 +74,7 @@ export default function SrimPanel({ srim, setSrim, setProfiles, setSrimMeta, pro
         newSrim.n = directN.toExponential(4);
       }
 
+      setFoundFiles(found);
       setComposition(comp);
       setSrim(newSrim);
       setParsedMeta(metaInfo);
@@ -143,6 +149,23 @@ export default function SrimPanel({ srim, setSrim, setProfiles, setSrimMeta, pro
         Drop SRIM folder or files here, or click to browse folder
         <span className="block text-xs text-gray-400 dark:text-gray-500 mt-0.5">Auto-finds VACANCY.txt · RANGE.txt · E2RECOIL.txt</span>
       </div>
+
+      {/* Missing files note */}
+      {foundFiles && !(foundFiles.e2recoil && foundFiles.vacancy && foundFiles.range) && (
+        <div className="flex items-start gap-2 text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded px-3 py-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 flex-shrink-0 mt-0.5">
+            <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+          </svg>
+          <div>
+            <span className="font-medium">Missing files: </span>
+            {[
+              !foundFiles.vacancy && "VACANCY.txt (needed for DPI & vacancy profile)",
+              !foundFiles.range && "RANGE.txt (needed for B peak & depth profile)",
+              !foundFiles.e2recoil && "E2RECOIL.txt (needed for atomic density)",
+            ].filter(Boolean).join(" · ")}
+          </div>
+        </div>
+      )}
 
       {/* Parameter fields with source descriptions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
